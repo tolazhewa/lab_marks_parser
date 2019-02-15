@@ -1,0 +1,5 @@
+After downloading the lab section via D2L, use this tool to parse and sort through the marks!
+
+To execute:
+
+> python3 lab_marker.py <dir_path>
