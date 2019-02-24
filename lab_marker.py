@@ -1,4 +1,4 @@
-import sys, re, os, glob
+import sys, re, os, glob, zipfile, shutil
 
 def add_grade(arg):
     with open(arg) as file:
@@ -38,10 +38,26 @@ def print_grades(arr):
 ################################# EXECUTION AREA ##########################$
 # Ensure the user inputs 2 arguments
 if len(sys.argv) != 2:
-    print('Please execute in this format: python3 lab_marker.py <dir>')
+    print('Please execute in this format: python3 lab_marker.py <zip file OR dir>')
     exit()
 
-dir_path = sys.argv[1]
+arg = sys.argv[1]
+
+# Zip file mode = 0
+# Directory mode = 1
+mode = 0
+
+if arg[-4:] == ".zip":
+    dir_path = "marks"
+    with zipfile.ZipFile(arg, "r") as zip_ref:
+        zip_ref.extractall(dir_path)
+elif os.path.isdir(arg):
+    dir_path = arg;
+    mode = 1
+else:
+    print("Not zip file or directory... exiting.")
+    exit(-1)
+
 students = []
 
 # Go through every txt file in subdirectory
@@ -53,4 +69,7 @@ for filename in glob.glob(os.path.join(dir_path, '*/*.txt')):
 # Sorts the students based off of name
 students = sorted(students, key=lambda x: x[0])
 print_grades(students)
+
+if mode == 0:
+    shutil.rmtree(dir_path)
 ############################################################################

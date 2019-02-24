@@ -2,4 +2,4 @@ After downloading the lab section via D2L, use this tool to parse and sort throu
 
 To execute:
 
-> python3 lab_marker.py <dir_path>
+> python3 lab_marker.py <zip_file OR dir_path>
