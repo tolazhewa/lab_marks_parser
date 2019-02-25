@@ -1,6 +1,7 @@
 import sys, re, os, glob, zipfile, shutil
+from subprocess import call
 
-def add_grade(arg):
+def add_grade(arg, mark):
     with open(arg) as file:
         # Read the content of the file
         file_content = file.read()
@@ -12,10 +13,10 @@ def add_grade(arg):
         
         # If it ever encounters a case where all three of those are found, it will print error and ret
         if len(name_list) != 1 or len(score_list) != 1 or len(perc_list) != 1:
-            print("ERROR OCCURED FOR:",arg)
-            # print("name_list len:", len(name_list),name_list)
-            # print("score_list len:", len(score_list),score_list)
-            # print("perc_list len:", len(perc_list),perc_list)
+            print("ERROR OCCURED FOR:", arg)
+            print("\n----- RESULTS FILE CONTENTS -----")
+            call(["tail", "-n", "5", arg])
+            print("---------------------------------\n\n")
             return None
 
         # Properly format the name
@@ -25,27 +26,34 @@ def add_grade(arg):
                 name += n[0].upper() + n.lower()[1:] + " "
         name = name[:-1]
 
+        mark = float("{0:.2f}".format(float(perc_list[0][:-1].replace(",","."))/100.0 * mark))
         # Return the current student name, score, percentage
-        return [name,score_list[0],perc_list[0]]
+        return [name,score_list[0],perc_list[0],mark]
 
 def print_grades(arr):
     # Prints the list with proper formatting
     print("\n")
-    for student,score,grade in arr:
-        print('{0: <25}'.format(student),"\t",score,"\t",grade)
+    for student,score,grade,mark in arr:
+        print('{:<25} {:<15} {:<10} {:<10}'.format(student, score, grade, '%.2f' % mark))
 
 
 ################################# EXECUTION AREA ##########################$
-# Ensure the user inputs 2 arguments
-if len(sys.argv) != 2:
-    print('Please execute in this format: python3 lab_marker.py <zip file OR dir>')
-    exit()
-
-arg = sys.argv[1]
-
 # Zip file mode = 0
 # Directory mode = 1
 mode = 0
+arg = sys.argv[1]
+
+# Ensure the user inputs 2 arguments
+if len(sys.argv) == 3:
+    try:
+        mark = float(sys.argv[2])
+    except ValueError:
+        print("mark_value must be a numerical value")
+elif len(sys.argv) == 2:
+    mark = 5.0
+else:
+    print('Please execute in this format: python3 lab_marker.py <zip file OR dir> (<mark_value>)')
+    exit()
 
 if arg[-4:] == ".zip":
     dir_path = "marks"
@@ -62,7 +70,7 @@ students = []
 
 # Go through every txt file in subdirectory
 for filename in glob.glob(os.path.join(dir_path, '*/*.txt')):
-    grade = add_grade(filename)
+    grade = add_grade(filename, mark)
     if grade != None:
         students.append(grade)
 
