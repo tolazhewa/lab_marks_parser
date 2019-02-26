@@ -10,7 +10,7 @@ def add_grade(arg, mark):
         name_list = re.findall("Student:\s(.*)\s\(.*\)\s*\n", file_content)
         score_list = re.findall("Score:\s*(.*\/.*)\s\(\d*[\.|\,]\d*\%\)\s*\n", file_content)
         perc_list = re.findall("Score:\s*.*\/.*\s\((\d*[\.|\,]\d*\%)\)\s*\n", file_content)
-        
+
         # If it ever encounters a case where all three of those are found, it will print error and ret
         if len(name_list) != 1 or len(score_list) != 1 or len(perc_list) != 1:
             print("ERROR OCCURED FOR:", arg)
@@ -41,7 +41,6 @@ def print_grades(arr):
 # Zip file mode = 0
 # Directory mode = 1
 mode = 0
-arg = sys.argv[1]
 
 # Ensure the user inputs 2 arguments
 if len(sys.argv) == 3:
@@ -54,6 +53,8 @@ elif len(sys.argv) == 2:
 else:
     print('Please execute in this format: python3 lab_marker.py <zip file OR dir> (<mark_value>)')
     exit()
+
+arg = sys.argv[1]
 
 if arg[-4:] == ".zip":
     dir_path = "marks"
