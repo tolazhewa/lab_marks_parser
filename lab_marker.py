@@ -13,7 +13,7 @@ def get_grade(file_name, mark):
         perc_list = re.findall("Score:\s*.*\/.*\s\((\d*[\.|\,]\d*\%)\)\s*\n", file_content)
 
         # If it ever encounters a case where all three of those are found, it will print error and ret
-        if len(name_list) != 1 or len(score_list) != 1 or len(perc_list) != 1:
+        if len(name_list) != 1 or len(score_list) != 1 or len(perc_list) != 1 or len(student_num) != 1:
             print("ERROR OCCURED FOR:", file_name)
             print("\n----- RESULTS FILE CONTENTS -----")
             call(["tail", "-n", "5", file_name])
