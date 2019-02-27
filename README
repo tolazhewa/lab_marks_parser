@@ -2,6 +2,6 @@ After downloading the lab section via D2L, use this tool to parse and sort throu
 
 To execute:
 
-> python3 lab_marker.py <zip_file OR dir_path> (Optional mark_value)
+> python3 lab_marker.py <zip_file OR dir_path> [mark_value]
 
 Mark value is out of 5 by default. Feel free to change it as you like.
