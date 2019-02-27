@@ -50,7 +50,7 @@ def print_grades(arr):
     for first_name, last_name, student_num, score, grade, mark in arr:
         print('{:<30} {:<8} {:<12} {:<10} {:<8}'.format(last_name + ", " + first_name, '%.2f' % mark, student_num, score, grade))
     print("------------------------------------------------------------------------\n")
-    print("Number of Students Submissions:", len(arr))
+    print("Number of Valid Students Submissions:", len(arr))
 
 
 ################################# EXECUTION AREA ##########################$
@@ -74,7 +74,7 @@ else:
 if arg[-4:] == ".zip":
     root_path = "marks"
     with zipfile.ZipFile(arg, "r") as zip_ref:
-        zip_ref.extractall(dir_path)
+        zip_ref.extractall(root_path)
 elif os.path.isdir(arg):
     root_path = arg
     mode = 1
@@ -85,19 +85,19 @@ else:
 entries = []
 
 # Go through every txt file in subdirectory
-
 for dir_name,_,_  in os.walk(root_path):
     for filename in glob.glob(dir_name + "/*.txt"):
-        grade = get_grade(filename, mark_value)
+        entry = get_grade(filename, mark_value)
 
-        if grade != None:
-        # If multiple entries, take the higher mark 
-            dup = duplicate_index(entries, grade)
+        # If multiple entries, take the higher mark, else add the entry
+        if entry != None:
+        
+            dup = duplicate_index(entries, entry)
             if dup != -1:
-                if grade[5] > entries[dup][5]:
-                    entries[dup] = grade
+                if entry[5] > entries[dup][5]:
+                    entries[dup] = entry
             else:
-                entries.append(grade)
+                entries.append(entry)
 
 # Sorts the students based off of last name
 entries = sorted(entries, key=lambda x: x[1])
@@ -106,5 +106,5 @@ entries = sorted(entries, key=lambda x: x[1])
 print_grades(entries)
 
 if mode == 0:
-    shutil.rmtree(dir_path)
+    shutil.rmtree(root_path)
 ############################################################################
