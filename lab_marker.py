@@ -31,11 +31,11 @@ def get_grade(file_name, mark):
 
         mark = float("{0:.2f}".format(float(perc_list[0][:-1].replace(",","."))/100.0 * mark))
 
-        
+
         # Return the current student's first name, last name(s), score, percentage, and adjusted mark
         return [first_name, last_name, student_num[0],score_list[0], perc_list[0], mark]
 
-# Check multiple entries by the same student, return index 
+# Check multiple entries by the same student, return index
 def duplicate_index(arr, elem):
     for i in range(len(arr)):
         if arr[i][0] == elem[0] and arr[i][1] == elem[1]: # If the first and last names match return the index
@@ -57,7 +57,6 @@ def print_grades(arr):
 # Zip file mode = 0
 # Directory mode = 1
 mode = 0
-arg = sys.argv[1]
 
 # Ensure the user inputs 2 arguments
 if len(sys.argv) == 3:
@@ -71,6 +70,7 @@ else:
     print('Please execute in this format: python3 lab_marker.py <zip file OR dir> (<mark_value>)')
     exit()
 
+arg = sys.argv[1]
 if arg[-4:] == ".zip":
     root_path = "marks"
     with zipfile.ZipFile(arg, "r") as zip_ref:
@@ -91,7 +91,7 @@ for dir_name,_,_  in os.walk(root_path):
 
         # If multiple entries, take the higher mark, else add the entry
         if entry != None:
-        
+
             dup = duplicate_index(entries, entry)
             if dup != -1:
                 if entry[5] > entries[dup][5]:
